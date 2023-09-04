@@ -20,9 +20,12 @@ RUN apt-get install -y apt-transport-https ca-certificates gnupg software-proper
 
 # install newest clang
 RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - && \
-    apt-add-repository "deb http://apt.llvm.org/$(lsb_release -cs)/ llvm-toolchain-$(lsb_release -cs) main" && \
-    apt-get update && \
+    apt-add-repository "deb http://apt.llvm.org/$(lsb_release -cs)/ llvm-toolchain-$(lsb_release -cs) main"
+
+RUN apt-get update && \
     apt-get install -y clang
+
+RUN apt-get install -y libomp-18-dev
 
 # install newer Eigen for TEASER++ and others
 RUN wget 'http://de.archive.ubuntu.com/ubuntu/pool/universe/e/eigen3/libeigen3-dev_3.3.7-2_all.deb' && \
@@ -40,17 +43,20 @@ ADD python/requirements.txt python/requirements.txt
 
 ARG NPROC=""
 
-RUN DEBIAN_FRONTEND=noninteractive NPROC=${NPROC} bash script/tools/install_dep_lib.sh
-
+RUN DEBIAN_FRONTEND=noninteractive 
+RUN NPROC=${NPROC} 
+RUN bash script/tools/install_dep_lib.sh
 FROM prereqs
 
 ADD . .
+
+# RUN apt install -y libfmt-dev
 
 ARG CXX_COMPILER=clang++
 RUN rm -rf build && \
     mkdir build && \
     cd build && \
-    cmake .. -DBUILD_WITH_SOPHUS=ON -DBUILD_WITH_PROJ4=ON -DBUILD_WITH_LIBLAS=ON -DCMAKE_CXX_COMPILER=${CXX_COMPILER} && \
+    cmake .. -DBUILD_WITH_SOPHUS=OFF -DBUILD_WITH_PROJ4=ON -DBUILD_WITH_LIBLAS=ON -DCMAKE_CXX_COMPILER=${CXX_COMPILER} && \
     make -j${NPROC}
 
 RUN apt-get install -y xvfb
