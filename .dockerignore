@@ -118,7 +118,7 @@ ENV/
 build/
 bin/
 assets/
-demo_data/
+### demo_data/
 log/
 .github/
 .dockerignore

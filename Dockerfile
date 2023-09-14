@@ -59,9 +59,15 @@ RUN rm -rf build && \
     cmake .. -DBUILD_WITH_SOPHUS=OFF -DBUILD_WITH_PROJ4=ON -DBUILD_WITH_LIBLAS=ON -DCMAKE_CXX_COMPILER=${CXX_COMPILER} && \
     make -j${NPROC}
 
+# RUN mkdir /mulls/demo_data
+# ADD abc/ /mulls/demo_data/
+
 RUN apt-get install -y xvfb
 RUN sed -i 's/real_time_viewer_on=1/real_time_viewer_on=0/g' script/run_mulls_slam.sh
 ENTRYPOINT ["/usr/bin/xvfb-run", "-a", "-s", "-screen 0 1024x768x24"]
-CMD ["script/run_mulls_slam.sh"]
+# CMD ["script/run_mulls_slam.sh"]
+
+# Set the default command
+CMD ["/bin/bash"]
 
 # /usr/bin/xvfb-run -a -s '-screen 0 1024x768x24' script/run_mulls_slam.sh
