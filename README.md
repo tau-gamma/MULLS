@@ -12,6 +12,21 @@ Codes are currently under refactoring for better readability and performance.
 
 ------
 
+### Alex - Run the docker container with your data
+
+Place your pcd data inside the dem_data/pcd with ascending numbers as names
+
+Run this command inside the MULLS folder:
+```
+docker build -t mulls:latest .
+```
+Run this command inside the MULLS folder:
+```
+docker run mulls:latest 
+```
+
+You can find the results like the computed poses inside the docker container in the mulls/demo_data/result folder.
+
 ### MULLS SLAM demo
 
 
